@@ -7,6 +7,7 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using API.Data;
 using API.Dto;
+using API.Utils;
 
 namespace API
 {
@@ -100,7 +101,7 @@ namespace API
 
             return new HttpResponseMessage(HttpStatusCode.Created)
             {
-                Content = new ObjectContent(typeof(int), id, new JsonMediaTypeFormatter())
+                Content = new IdentityContent(id, new JsonMediaTypeFormatter())
             };
         }
     }

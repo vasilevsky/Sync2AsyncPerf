@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Dependencies;
 using System.Web.Http.ExceptionHandling;
 using API.Utils;
 using Domain;
+using Microsoft.Owin;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Syntax;

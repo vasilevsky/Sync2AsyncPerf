@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using API.Data;
+using API.Utils;
 using Domain.Data;
 using Microsoft.Owin.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -72,7 +73,8 @@ namespace API.Tests
                     requestUri: "V1/customers",
                     content: content);
 
-                var customerId = await response.Content.ReadAsAsync<int>();
+                var id = await response.Content.ReadAsAsync<int>();
+                var customerId = RestoreDbId(id);
 
                 Assert.IsTrue(customerId > 0);
                 var customer = readContext.Customers
@@ -95,7 +97,8 @@ namespace API.Tests
                     requestUri: "V1/customersasync",
                     content: content);
 
-                var customerId = await response.Content.ReadAsAsync<int>();
+                var id = await response.Content.ReadAsAsync<int>();
+                var customerId = RestoreDbId(id);
 
                 Assert.IsTrue(customerId > 0);
                 var customer = readContext.Customers
@@ -110,6 +113,11 @@ namespace API.Tests
         {
             var testServer = TestServer.Create<Startup>();
             return testServer;
+        }
+
+        private int RestoreDbId(int id)
+        {
+            return id - IdentityContent.IdentityBase;
         }
     }
 }
