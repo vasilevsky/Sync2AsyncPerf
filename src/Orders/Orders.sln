@@ -13,11 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Tests", "Api.Tests\Api.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B06684B9-6513-4BDF-B0BE-C6AA45EB0373}"
 	ProjectSection(SolutionItems) = preProject
-		ab.exe = ab.exe
-		ab_sample.cmd = ab_sample.cmd
 		BeforeStart.txt = BeforeStart.txt
-		customer.json = customer.json
-		LaunchHostsAndWarmup.ps1 = LaunchHostsAndWarmup.ps1
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wcf.ConsoleHost", "WCF.ConsoleHost\Wcf.ConsoleHost.csproj", "{F89547A7-4841-4333-BCA0-D269FBFA5114}"
