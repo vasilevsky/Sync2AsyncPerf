@@ -48,7 +48,7 @@ Async - **POST http://localhost:8090/v1/customersasync** + customer data payload
 |------|-------------------------|-------------------|------|-----|
 |async|500/20000|119.27ms|single, i5-2500 @ 3.30 GHz 4 Cores, 16GB, Win10 64, LocalDb|Fails when exceed number of `Max Pool Size`|
 |sync|500/20000|154.97ms|||
-|async|500/10000|130.18ms|caller - network, Xeon E5-2609 2 Cores, 4GB, local MSSQL2014|4001 failed requests|
+|async|500/10000|130.18ms|caller - network, Xeon E5-2609 2 Cores, 4GB, local MSSQL2014|~~4001 failed requests~~ __verify__|
 |sync|500/10000|144.59ms||CPU ~100%|
 |async|500/20000|Empty DB - 190.78ms, 60000 - 143.41ms, 100000 - 84.51ms|api - Xeon E5-2609 2 Cores, 4GB; sql - network, MSSQL2014, Xeon E5-2609 2 Cores, 4GB| SQL 100%|
 |sync|500/20000|Empty BD - 220.31ms, 60000 - 110.52ms, 100000 - 88.94ms||SQL 100%|
