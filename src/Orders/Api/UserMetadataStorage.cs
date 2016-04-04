@@ -11,13 +11,10 @@ namespace API
 
         public static async Task PersistAsync(CustomerData data)
         {
-            await Task.Run(() =>
+            if (!Directory.Exists(metadataPath))
             {
-                if (!Directory.Exists(metadataPath))
-                {
-                    Directory.CreateDirectory(metadataPath);
-                }
-            });
+                Directory.CreateDirectory(metadataPath);
+            }
 
             string fileName = metadataPath + Guid.NewGuid() + ".xml";
             using (var xml = XmlWriter.Create(fileName, new XmlWriterSettings() { Async = true }))
@@ -28,7 +25,7 @@ namespace API
                 await xml.WriteEndElementAsync();
             }
 
-            await Task.Run(() => File.Delete(fileName));
+            File.Delete(fileName);
         }
 
         public static void Persist(CustomerData data)
