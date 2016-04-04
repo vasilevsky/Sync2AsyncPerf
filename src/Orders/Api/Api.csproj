@@ -162,6 +162,8 @@
       <DependentUpon>CustomerOrders.tt</DependentUpon>
     </Compile>
     <Compile Include="Dto\OrderDetails.cs" />
+    <Compile Include="HeavyDbRequestsController.cs" />
+    <Compile Include="HeavyIoRequestsController.cs" />
     <Compile Include="ICustomerOrdersService.cs" />
     <Compile Include="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>
