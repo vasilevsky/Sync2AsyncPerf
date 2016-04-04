@@ -1,0 +1,3 @@
+Run following powershell command in order to setup database:
+
+update-database -projectname Domain
