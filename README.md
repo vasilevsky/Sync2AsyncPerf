@@ -52,5 +52,5 @@ Async - **POST http://localhost:8090/v1/customersasync** + customer data payload
 |sync|500/10000|144.59||CPU ~100%|
 |async|500/20000|Empty DB - 190.78, 60000 - 143.41, 100000 - 84.51|ab, wcf, api => srv A: Xeon E5-2609 2 Cores, 4GB; sql => srv B, network, MSSQL2014, Xeon E5-2609 2 Cores, 4GB| SQL 100%|
 |sync|500/20000|Empty BD - 220.31, 60000 - 110.52, 100000 - 88.94||SQL 100%|
-|async|1000/20000|20000->260000: 152.81, 94.14, 52.37, 47.77, 43.71, 30.23  |ab,wcf,api => srv A: Xeon E5-2609 2 Cores, 4GB; sql => srv B, network, MSSQL2014, Xeon X5560 @ 2.8 GHz, 2 Cores, 4GB|*SQL 100% with fall downs|
-|sync|1000/20000|20000->260000: 219.51, 92.56, 82.91, 44.39, 40.18, 34.13||**SQL 100%|
+|async|1000/20000|20000->260000: 152.81, 94.14, 52.37, 47.77, 43.71, 30.23  |ab,wcf,api => srv A: Xeon E5-2609 2 Cores, 4GB; sql => srv B, network, MSSQL2014, Xeon X5560 @ 2.8 GHz, 2 Cores, 4GB|*SQL 100% with fall downs, failed 5+937 (ab: -length, api: cannot open db)|
+|sync|1000/20000|20000->260000: 219.51, 92.56, 82.91, 44.39, 40.18, 34.13||**SQL 100%, failed 157+710 (ab: -length, api: cannot open db)|
