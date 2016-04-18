@@ -59,16 +59,28 @@
     <Compile Include="Migrations\201602092130425_InitialStructure.Designer.cs">
       <DependentUpon>201602092130425_InitialStructure.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604181932228_ProductsAndLines.cs" />
+    <Compile Include="Migrations\201604181932228_ProductsAndLines.Designer.cs">
+      <DependentUpon>201604181932228_ProductsAndLines.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Order.cs" />
+    <Compile Include="OrderLine.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201602092130425_InitialStructure.resx">
       <DependentUpon>201602092130425_InitialStructure.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604181932228_ProductsAndLines.resx">
+      <DependentUpon>201604181932228_ProductsAndLines.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

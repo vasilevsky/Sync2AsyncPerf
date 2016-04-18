@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Domain
 {
@@ -20,6 +21,8 @@ namespace Domain
         public DateTime CreatedDate { get; private set; }
 
         public Customer Customer { get; private set; }
+
+        public ICollection<OrderLine> OrderLines { get; private set; }
 
         /// <summary>
         /// Creates instance of Order.

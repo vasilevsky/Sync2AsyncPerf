@@ -23,7 +23,6 @@ namespace Domain.Data
         public CustomerOrdersContext()
             : base(Name)
         {
-            transaction = Database.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
         /// <summary>
@@ -66,6 +65,8 @@ namespace Domain.Data
         {
             modelBuilder.Configurations.Add(new CustomerConfig());
             modelBuilder.Configurations.Add(new OrderConfig());
+            modelBuilder.Configurations.Add(new OrderLineConfig());
+            modelBuilder.Configurations.Add(new ProductConfig());
 
             base.OnModelCreating(modelBuilder);
         }
@@ -101,6 +102,32 @@ namespace Domain.Data
                 Property(m => m.Price).IsRequired();
                 Property(m => m.CreatedDate).IsRequired();
                 HasRequired(m => m.Customer);
+                HasMany(m => m.OrderLines);
+            }
+        }
+
+        private class OrderLineConfig : EntityTypeConfiguration<OrderLine>
+        {
+            public OrderLineConfig()
+            {
+                ToTable("OrderLines");
+                HasKey(m => m.Id).Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                Property(m => m.Price).IsRequired();
+                Property(m => m.Currency).IsRequired();
+                Property(m => m.Number).IsRequired();
+                Property(m => m.Units).IsRequired();
+                HasRequired(m => m.Product);
+            }
+        }
+
+        private class ProductConfig : EntityTypeConfiguration<Product>
+        {
+            public ProductConfig()
+            {
+                ToTable("Products");
+                HasKey(m => m.Id).Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+                Property(m => m.Name).IsRequired();
+                Property(m => m.Description);
             }
         }
     }

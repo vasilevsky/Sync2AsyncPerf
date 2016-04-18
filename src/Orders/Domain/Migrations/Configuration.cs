@@ -1,18 +1,15 @@
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using Domain.Data;
-
 namespace Domain.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<CustomerOrdersContext>
+    using System.Data.Entity.Migrations;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<Domain.Data.CustomerOrdersContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
         }
 
-
-        protected override void Seed(CustomerOrdersContext context)
+        protected override void Seed(Domain.Data.CustomerOrdersContext context)
         {
             var chuck = Customer.Create("Chuck Noris", "chuck@example.com");
             chuck.AddOrder(78.35m);
