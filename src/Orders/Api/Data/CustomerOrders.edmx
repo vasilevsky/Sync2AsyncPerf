@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CustomerOrdersModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CustomerOrdersModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Customers">
           <Key>
             <PropertyRef Name="Id" />
@@ -12,6 +12,18 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderLines">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Units" Type="int" Nullable="false" />
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Currency" Type="int" Nullable="false" />
+          <Property Name="Product_Id" Type="int" Nullable="false" />
+          <Property Name="Order_Id" Type="int" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -22,6 +34,40 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="Customer_Id" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_dbo_OrderLines_dbo_Orders_Order_Id">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="OrderLines" Type="Self.OrderLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLines">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_OrderLines_dbo_Products_Product_Id">
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderLines" Type="Self.OrderLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLines">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_Orders_dbo_Customers_Customer_Id">
           <End Role="Customers" Type="Self.Customers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -38,14 +84,23 @@
         </Association>
         <EntityContainer Name="CustomerOrdersModelStoreContainer">
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderLines" EntityType="Self.OrderLines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_OrderLines_dbo_Orders_Order_Id" Association="Self.FK_dbo_OrderLines_dbo_Orders_Order_Id">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderLines" EntitySet="OrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_OrderLines_dbo_Products_Product_Id" Association="Self.FK_dbo_OrderLines_dbo_Products_Product_Id">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderLines" EntitySet="OrderLines" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_Orders_dbo_Customers_Customer_Id" Association="Self.FK_dbo_Orders_dbo_Customers_Customer_Id">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CustomerOrdersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -67,6 +122,7 @@
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Customer_Id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_dbo_Orders_dbo_Customers_Customer_Id" FromRole="Orders" ToRole="Customers" />
+          <NavigationProperty Name="OrderLines" Relationship="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Orders_Order_Id" FromRole="Order" ToRole="OrderLine" />
         </EntityType>
         <Association Name="FK_dbo_Orders_dbo_Customers_Customer_Id">
           <End Role="Customers" Type="Self.Customer" Multiplicity="1">
@@ -89,7 +145,66 @@
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
+          <EntitySet Name="OrderLines" EntityType="CustomerOrdersModel.OrderLine" />
+          <EntitySet Name="Products" EntityType="CustomerOrdersModel.Product" />
+          <AssociationSet Name="FK_dbo_OrderLines_dbo_Orders_Order_Id" Association="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Orders_Order_Id">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderLine" EntitySet="OrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_OrderLines_dbo_Products_Product_Id" Association="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Products_Product_Id">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="OrderLine" EntitySet="OrderLines" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="OrderLine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Units" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Currency" Type="Int32" Nullable="false" />
+          <Property Name="Product_Id" Type="Int32" Nullable="false" />
+          <Property Name="Order_Id" Type="Int32" />
+          <NavigationProperty Name="Order" Relationship="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Orders_Order_Id" FromRole="OrderLine" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Products_Product_Id" FromRole="OrderLine" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderLines" Relationship="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Products_Product_Id" FromRole="Product" ToRole="OrderLine" />
+        </EntityType>
+        <Association Name="FK_dbo_OrderLines_dbo_Orders_Order_Id">
+          <End Type="CustomerOrdersModel.Order" Role="Order" Multiplicity="0..1" />
+          <End Type="CustomerOrdersModel.OrderLine" Role="OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="Order_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_OrderLines_dbo_Products_Product_Id">
+          <End Type="CustomerOrdersModel.Product" Role="Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CustomerOrdersModel.OrderLine" Role="OrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderLine">
+              <PropertyRef Name="Product_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -112,6 +227,28 @@
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderLines">
+            <EntityTypeMapping TypeName="CustomerOrdersModel.OrderLine">
+              <MappingFragment StoreEntitySet="OrderLines">
+                <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
+                <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Units" ColumnName="Units" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="CustomerOrdersModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

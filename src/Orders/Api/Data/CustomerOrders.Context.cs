@@ -29,5 +29,7 @@ namespace API.Data
     
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderLine> OrderLines { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
     }
 }

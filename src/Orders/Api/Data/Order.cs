@@ -14,11 +14,17 @@ namespace API.Data
     
     public partial class Order
     {
+        public Order()
+        {
+            this.OrderLines = new HashSet<OrderLine>();
+        }
+    
         public int Id { get; set; }
         public decimal Price { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public int Customer_Id { get; set; }
     
         public virtual Customer Customer { get; set; }
+        public virtual ICollection<OrderLine> OrderLines { get; set; }
     }
 }

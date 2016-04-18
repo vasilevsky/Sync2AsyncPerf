@@ -133,6 +133,12 @@
     <Compile Include="CustomerData.cs" />
     <Compile Include="CustomerOrdersService.cs" />
     <Compile Include="CustomersAsyncController.cs" />
+    <Compile Include="Data\OrderLine.cs">
+      <DependentUpon>CustomerOrders.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Product.cs">
+      <DependentUpon>CustomerOrders.tt</DependentUpon>
+    </Compile>
     <Compile Include="Dto\CustomerInfo.cs" />
     <Compile Include="CustomersController.cs" />
     <Compile Include="Data\ContextFactory.cs" />

@@ -8,6 +8,10 @@
         <EntityTypeShape EntityType="CustomerOrdersModel.Customer" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="CustomerOrdersModel.Order" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="CustomerOrdersModel.FK_dbo_Orders_dbo_Customers_Customer_Id" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CustomerOrdersModel.OrderLine" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="CustomerOrdersModel.Product" Width="1.5" PointX="3" PointY="4.25" />
+        <AssociationConnector Association="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Orders_Order_Id" />
+        <AssociationConnector Association="CustomerOrdersModel.FK_dbo_OrderLines_dbo_Products_Product_Id" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

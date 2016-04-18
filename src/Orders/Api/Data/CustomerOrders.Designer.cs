@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Nastya\Desktop\Orders\Orders\Api\Data\CustomerOrders.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\work\github\Sync2AsyncPerf\src\Orders\Api\Data\CustomerOrders.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
