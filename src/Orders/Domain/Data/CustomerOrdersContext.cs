@@ -35,7 +35,13 @@ namespace Domain.Data
             transaction = Database.BeginTransaction(isolationLevel);
         }
 
+        public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
+
+        internal DbSet<Order> Orders { get; set; }
+
+        internal DbSet<OrderLine> OrderLines { get; set; }
+
 
         public Customer GetCustomer(int id)
         {

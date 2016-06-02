@@ -38,6 +38,23 @@ namespace Domain
         {
             var order = Order.Create(price);
 
+            return AddOrder(order);
+        }
+
+        public void AddOrder(DraftOrder draftOrder)
+        {
+            var order = new Order(this, draftOrder);
+
+            AddOrder(order);
+        }
+
+        private Order AddOrder(Order order)
+        {
+            if (Orders == null)
+            {
+                Orders = new Collection<Order>();
+            }
+
             Orders.Add(order);
 
             return order;

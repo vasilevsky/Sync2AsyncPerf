@@ -2,17 +2,26 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using API.Data;
+using Domain.Data;
+using Domain.Migrations;
 
 namespace API
 {
-    public class HeavyDbRequestsAsyncController
+    public class HeavyDbRequestsController : ApiController
     {
         PeriodStartRandomizer randomizer = new PeriodStartRandomizer();
 
-        /// <summary>
-        /// Gets stastics over period 
-        /// </summary>
+        [HttpGet]
+        public void SeedData()
+        {
+            var seeding = new DataSeeding(new CustomerOrdersContext());
+            seeding.Seed();
+        }
+
+        [Route("aheavy")]
+        [HttpGet]
         public async Task<PeriodSummaryDto> SingleQueryHeavyComputationAsync()
         {
             var monthPeriod = randomizer.GetPeriod();
@@ -21,27 +30,77 @@ namespace API
             {
                 var q = from o in data.Orders
                         where o.CreatedDate >= monthPeriod.Start && o.CreatedDate <= monthPeriod.End
-                        group o by o.Id
-                            into og
-                            select
-                                new
-                                {
-                                    PeriodStart = monthPeriod.Start,
-                                    PeriodEnd = monthPeriod.End,
-                                    TotalSpent = og.Sum(m => m.Price),
-                                    UniqueCustomers = og.Select(m => m.Customer_Id).Distinct().Count(),
-                                    UniqueProducts = og.Select(m => m.OrderLines.Select(ol => ol.Product_Id)).Distinct().Count(),
-                                };
+                        group o by 1 into og
+                        select
+                            new
+                            {
+                                PeriodStart = monthPeriod.Start,
+                                PeriodEnd = monthPeriod.End,
+                                FirstOrderInPeriodDate = og.Min(m => m.CreatedDate),
+                                LastOrderInPeriodDate = og.Max(m => m.CreatedDate),
+                                OrdersInPeriod = og.Count(),
+                                TotalSpent = og.SelectMany(m => m.OrderLines).Sum(m => m.Price),
+                                UniqueCustomers = og.Select(m => m.Customer_Id).Distinct().Count(),
+                                UniqueProducts = og.SelectMany(m => m.OrderLines).Select(m => m.Product_Id).Distinct().Count(),
+                            };
 
                 var x = await q.FirstOrDefaultAsync();
                 return new PeriodSummaryDto
-                    {
-                        PeriodStart = x.PeriodStart,
-                        PeriodEnd = x.PeriodEnd,
-                        TotalSpent = x.TotalSpent,
-                        UniqueCustomers = x.UniqueCustomers,
-                        UniqueProducts = x.UniqueProducts
-                    };
+                {
+                    PeriodStart = x.PeriodStart,
+                    PeriodEnd = x.PeriodEnd,
+                    FirstOrderInPeriodDate = x.FirstOrderInPeriodDate,
+                    LastOrderInPeriodDate = x.LastOrderInPeriodDate,
+                    OrdersInPeriod = x.OrdersInPeriod,
+                    TotalSpent = x.TotalSpent,
+                    UniqueCustomers = x.UniqueCustomers,
+                    UniqueProducts = x.UniqueProducts
+                };
+            }
+
+        }
+
+
+        /// <summary>
+        /// Gets stastics over period 
+        /// </summary>
+        [Route("heavy")]
+        [HttpGet]
+        public PeriodSummaryDto SingleQueryHeavyComputation()
+        {
+            var monthPeriod = randomizer.GetPeriod();
+
+            using (var data = new CustomerOrdersEntities())
+            {
+                var q = from o in data.Orders
+                        where o.CreatedDate >= monthPeriod.Start && o.CreatedDate <= monthPeriod.End
+                        group o by 1 into og
+                        select
+                            new
+                            {
+                                PeriodStart = monthPeriod.Start,
+                                PeriodEnd = monthPeriod.End,
+                                FirstOrderInPeriodDate = og.Min(m => m.CreatedDate),
+                                LastOrderInPeriodDate = og.Max(m => m.CreatedDate),
+                                OrdersInPeriod = og.Count(),
+                                TotalSpent = og.SelectMany(m => m.OrderLines).Sum(m => m.Price),
+                                UniqueCustomers = og.Select(m => m.Customer_Id).Distinct().Count(),
+                                UniqueProducts = og.SelectMany(m => m.OrderLines).Select(m => m.Product_Id).Distinct().Count(),
+                            };
+
+                var x = q.FirstOrDefault();
+
+                return new PeriodSummaryDto
+                {
+                    PeriodStart = x.PeriodStart,
+                    PeriodEnd = x.PeriodEnd,
+                    FirstOrderInPeriodDate = x.FirstOrderInPeriodDate,
+                    LastOrderInPeriodDate = x.LastOrderInPeriodDate,
+                    OrdersInPeriod = x.OrdersInPeriod,
+                    TotalSpent = x.TotalSpent,
+                    UniqueCustomers = x.UniqueCustomers,
+                    UniqueProducts = x.UniqueProducts
+                };
             }
         }
 
@@ -52,14 +111,11 @@ namespace API
             public decimal TotalSpent { get; set; }
             public int UniqueCustomers { get; set; }
             public int UniqueProducts { get; set; }
-
+            public DateTime FirstOrderInPeriodDate { get; set; }
+            public DateTime LastOrderInPeriodDate { get; set; }
+            public int OrdersInPeriod { get; set; }
         }
 
-        public class DataSeeding
-        {
-            public static readonly DateTime StartDate = new DateTime(2006, 1, 1);
-            public static readonly DateTime EndDate = new DateTime(2016, 1, 1);
-        }
 
         private class PeriodStartRandomizer
         {

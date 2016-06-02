@@ -64,6 +64,7 @@
       <DependentUpon>201604181932228_ProductsAndLines.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="DraftOrder.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderLine.cs" />
     <Compile Include="Product.cs" />

@@ -1,10 +1,23 @@
-﻿using System.Data.Entity.Spatial;
-
-namespace Domain
+﻿namespace Domain
 {
     public class OrderLine
     {
         private OrderLine() { }
+
+        public OrderLine(
+            Product product,
+            int number,
+            Units units,
+            decimal price,
+            Currency currency)
+        {
+            Product = product;
+            Number = number;
+            Units = units;
+            Price = price;
+            Currency = currency;
+        }
+
         public Product Product { get; private set; }
 
         public Units Units { get; private set; }

@@ -2,13 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/src/Orders/Api.ConsoleHost/bin/Debug
-/src/Orders/Api.ConsoleHost/obj
-/src/Orders/Api.Tests/bin
-/src/Orders/Api.Tests/obj
-/src/Orders/Domain/bin
-/src/Orders/Api/bin
-/src/Orders/Api/obj
-/src/Orders/Domain.Tests/bin
-/src/Orders/Domain.Tests/obj
 /src/Orders/Output
+**.user
+**/packages
+**/bin
+**/obj
+**.suo

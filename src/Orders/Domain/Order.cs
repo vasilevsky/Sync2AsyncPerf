@@ -14,6 +14,14 @@ namespace Domain
             CreatedDate = createdDate;
         }
 
+        public Order(Customer customer, DraftOrder draft)
+        {
+            Customer = customer;
+            Price = draft.Price;
+            OrderLines = draft.OrderLines;
+            CreatedDate = draft.CreatedDate;
+        }
+
         public int Id { get; private set; }
 
         public decimal Price { get; private set; }
