@@ -17,7 +17,7 @@ namespace API
         public void SeedData()
         {
             var seeding = new DataSeeding(new CustomerOrdersContext());
-            seeding.Seed();
+            seeding.Seed(10000, 1000);
         }
 
         [Route("aheavy")]

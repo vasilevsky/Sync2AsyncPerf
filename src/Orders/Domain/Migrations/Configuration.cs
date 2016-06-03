@@ -33,8 +33,6 @@ namespace Domain.Migrations
 
     public class DataSeeding
     {
-        private readonly int numberOfCustomers = 100;
-        private readonly int numberOfProducts = 100;
         private Random random = new Random();
 
         private readonly CustomerOrdersContext context;
@@ -46,10 +44,10 @@ namespace Domain.Migrations
             this.context = context;
         }
 
-        public void Seed()
+        public void Seed(int numberOfCustomers = 100, int numberOfProducts = 100)
         {
-            SeedCustomers();
-            SeedProducts();
+            SeedCustomers(numberOfCustomers);
+            SeedProducts(numberOfProducts);
             var customers = context.Customers.ToArray();
             var products = context.Products.ToArray();
 
@@ -57,12 +55,12 @@ namespace Domain.Migrations
             {
                 for (int j = 0; j < numberOfCustomers; j++)
                 {
-                    SeedCustomerOrders(customers[j], products);
+                    SeedCustomerOrders(customers[j], products, numberOfProducts);
                 }
             }
         }
 
-        private void SeedCustomerOrders(Customer customer, Product[] products)
+        private void SeedCustomerOrders(Customer customer, Product[] products, int numberOfProducts)
         {
             var diff = EndDate - StartDate;
             var hours = random.Next(0, (int)diff.TotalHours);
@@ -87,7 +85,7 @@ namespace Domain.Migrations
             context.SaveChanges();
         }
 
-        private void SeedCustomers()
+        private void SeedCustomers(int numberOfCustomers)
         {
             for (int i = 0; i < numberOfCustomers; i++)
             {
@@ -98,7 +96,7 @@ namespace Domain.Migrations
             }
         }
 
-        private void SeedProducts()
+        private void SeedProducts(int numberOfProducts)
         {
             for (int i = 0; i < numberOfProducts; i++)
             {
